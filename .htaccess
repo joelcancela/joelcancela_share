@@ -1,0 +1,20 @@
+# Rewrite URL to HTTPS
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+# Make this folder accessible
+# Apache < 2.3
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Allow from all
+    Satisfy All
+</IfModule>
+
+# Apache ≥ 2.3
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
